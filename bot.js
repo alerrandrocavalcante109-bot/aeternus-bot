@@ -62,7 +62,11 @@ client.on("messageCreate", (msg) => {
       return;
     }
 
-    let ganho = Math.floor(Math.random() * 100);
+    // ganho aleatório entre 5.000 e 10.000 almas
+    const MIN_GAIN = 5000;
+    const MAX_GAIN = 10000;
+    let ganho = Math.floor(Math.random() * (MAX_GAIN - MIN_GAIN + 1)) + MIN_GAIN;
+
     almas[msg.author.id] = (almas[msg.author.id] || 0) + ganho;
     lastWork[msg.author.id] = now;
 
@@ -72,7 +76,7 @@ client.on("messageCreate", (msg) => {
       console.error("Erro ao salvar economia.json:", err);
     }
 
-    msg.reply(`💸 Você ganhou ${ganho}`);
+    msg.reply(`💸 Você ganhou ${ganho} almas`);
   }
 });
 
