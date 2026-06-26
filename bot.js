@@ -26,6 +26,10 @@ try {
   console.error("Erro ao ler/gravar economia.json:", err);
 }
 
+// cooldowns (em ms)
+const WORK_COOLDOWN = 5 * 60 * 1000; // 5 minutos
+let lastWork = {};
+
 client.on("ready", () => {
   console.log(`🤖 Logado como ${client.user.tag}`);
 });
@@ -43,10 +47,24 @@ client.on("messageCreate", (msg) => {
     msg.reply(`💰 Seu saldo: ${dinheiro}`);
   }
 
-  // Comando A.work (antigo A.trabalhar)
+  // Comando A.work (antigo A.trabalhar) com cooldown
   if (comando === "work") {
+    const now = Date.now();
+    const last = lastWork[msg.author.id] || 0;
+    const diff = now - last;
+
+    if (diff < WORK_COOLDOWN) {
+      const msLeft = WORK_COOLDOWN - diff;
+      const minutes = Math.floor(msLeft / 60000);
+      const seconds = Math.floor((msLeft % 60000) / 1000);
+      const timeStr = `${minutes}m ${seconds}s`;
+      msg.reply(`⏳ Você já trabalhou recentemente. Aguarde ${timeStr} antes de usar A.work novamente.`);
+      return;
+    }
+
     let ganho = Math.floor(Math.random() * 100);
     economia[msg.author.id] = (economia[msg.author.id] || 0) + ganho;
+    lastWork[msg.author.id] = now;
 
     try {
       fs.writeFileSync("./economia.json", JSON.stringify(economia, null, 2));
