@@ -12,15 +12,15 @@ const client = new Client({
 const prefix = "A.";
 
 // carregar dados
-let economia = {};
+let almas = {};
 
 try {
   if (fs.existsSync("./economia.json")) {
     const raw = fs.readFileSync("./economia.json", "utf8");
-    economia = JSON.parse(raw || "{}");
+    almas = JSON.parse(raw || "{}");
   } else {
     // cria o arquivo se não existir
-    fs.writeFileSync("./economia.json", JSON.stringify(economia, null, 2));
+    fs.writeFileSync("./economia.json", JSON.stringify(almas, null, 2));
   }
 } catch (err) {
   console.error("Erro ao ler/gravar economia.json:", err);
@@ -43,7 +43,7 @@ client.on("messageCreate", (msg) => {
 
   // Comando A.atm (antigo A.saldo)
   if (comando === "atm") {
-    let dinheiro = economia[msg.author.id] || 0;
+    let dinheiro = almas[msg.author.id] || 0;
     msg.reply(`💰 Seu saldo: ${dinheiro}`);
   }
 
@@ -63,11 +63,11 @@ client.on("messageCreate", (msg) => {
     }
 
     let ganho = Math.floor(Math.random() * 100);
-    economia[msg.author.id] = (economia[msg.author.id] || 0) + ganho;
+    almas[msg.author.id] = (almas[msg.author.id] || 0) + ganho;
     lastWork[msg.author.id] = now;
 
     try {
-      fs.writeFileSync("./economia.json", JSON.stringify(economia, null, 2));
+      fs.writeFileSync("./economia.json", JSON.stringify(almas, null, 2));
     } catch (err) {
       console.error("Erro ao salvar economia.json:", err);
     }
