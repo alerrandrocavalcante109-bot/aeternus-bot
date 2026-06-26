@@ -41,13 +41,13 @@ client.on("messageCreate", (msg) => {
   const args = msg.content.slice(prefix.length).trim().split(/\s+/);
   const comando = args.shift().toLowerCase();
 
-  // Comando A.atm (antigo A.saldo)
+  // Comando A.atm (mostra almas)
   if (comando === "atm") {
     let dinheiro = almas[msg.author.id] || 0;
-    msg.reply(`💰 Seu saldo: ${dinheiro}`);
+    msg.reply(`💰 Você possui ${dinheiro} almas`);
   }
 
-  // Comando A.work (antigo A.trabalhar) com cooldown
+  // Comando A.work com cooldown e ganho entre 5.000 e 10.000 almas
   if (comando === "work") {
     const now = Date.now();
     const last = lastWork[msg.author.id] || 0;
