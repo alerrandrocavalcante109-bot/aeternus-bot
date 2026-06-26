@@ -37,12 +37,14 @@ client.on("messageCreate", (msg) => {
   const args = msg.content.slice(prefix.length).trim().split(/\s+/);
   const comando = args.shift().toLowerCase();
 
-  if (comando === "saldo") {
+  // Comando A.atm (antigo A.saldo)
+  if (comando === "atm") {
     let dinheiro = economia[msg.author.id] || 0;
     msg.reply(`💰 Seu saldo: ${dinheiro}`);
   }
 
-  if (comando === "trabalhar") {
+  // Comando A.work (antigo A.trabalhar)
+  if (comando === "work") {
     let ganho = Math.floor(Math.random() * 100);
     economia[msg.author.id] = (economia[msg.author.id] || 0) + ganho;
 
